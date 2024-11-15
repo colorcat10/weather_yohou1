@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>雨雲レーダー</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>雨雲レーダー</h1>
+        <div id="map"></div>
+    </div>
+    <script>
+        var map = L.map('map').setView([35.6895, 139.6917], 10); // 東京の座標を設定
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var apiKey = 'a90d94a74a5d6ae8ed672f2170276b57';
+
+        L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`, {
+            attribution: '&copy; <a href="https://home.openweathermap.org">OpenWeatherMap</a>',
+            opacity: 0.5
+        }).addTo(map);
+    </script>
+</body>
+</html>

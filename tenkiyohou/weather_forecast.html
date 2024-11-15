@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>天気予報</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .icon {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>天気予報検索</h1>
+        <input type="text" id="city" placeholder="都市名を入力">
+        <button onclick="fetchWeather()">検索</button>
+        <ul id="weather-list"></ul>
+    </div>
+    <script>
+        async function fetchWeather() {
+            const city = document.getElementById('city').value;
+            const apiKey = 'a90d94a74a5d6ae8ed672f2170276b57';
+            const url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&cnt=7&appid=${apiKey}&lang=ja&units=metric`;
+            const response = await fetch(url);
+            const data = await response.json();
+            displayWeather(data);
+        }
+
+        function displayWeather(data) {
+            const weatherList = document.getElementById('weather-list');
+            weatherList.innerHTML = '';
+            data.list.forEach(day => {
+                const iconUrl = `http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<div>
+                                        日付: ${new Date(day.dt * 1000).toLocaleDateString()}<br>
+                                        天気: ${day.weather[0].description}<br>
+                                        気温: ${day.main.temp}°C<br>
+                                        湿度: ${day.main.humidity}%<br>
+                                        風速: ${day.wind.speed}m/s
+                                      </div>
+                                      <img class="icon" src="${iconUrl}" alt="${day.weather[0].description}">`;
+                weatherList.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>
